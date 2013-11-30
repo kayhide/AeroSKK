@@ -4,7 +4,11 @@ require 'motion/project/template/osx'
 
 begin
   require 'bundler'
-  Bundler.require
+  if ARGV.join(' ') =~ /spec/
+    Bundler.require :default, :spec
+  else
+    Bundler.require
+  end
 rescue LoadError
 end
 
@@ -12,6 +16,8 @@ Motion::Project::App.setup do |app|
   app.name = 'AeroSKK'
   app.identifier = 'com.runnable-inc.inputmethod.AeroSKK'
   app.frameworks << 'InputMethodKit'
+
+  app.redgreen_style = :full if app.respond_to?(:redgreen_style)
 
   app.info_plist['CFBundleDevelopmentRegion'] = 'ja_JP'
   app.info_plist['CFBundleIconFile'] = ''
@@ -59,7 +65,7 @@ Motion::Project::App.setup do |app|
 
 end
 
-task :install => 'build:development' do
+task :install do
   app = Dir['./**/*.app'].first.gsub(/ /, '\\ ')
   basename = File.basename(app)
   dst = '~/Library/Input Methods/'.gsub(/ /, '\\ ')

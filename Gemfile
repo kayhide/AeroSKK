@@ -1,4 +1,10 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-# Add your dependencies here:
+
+gem 'guard-motion'
+
+group :spec do
+  gem 'motion-redgreen'
+  gem 'motion-facon'
+end

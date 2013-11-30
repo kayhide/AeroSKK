@@ -1,0 +1,5 @@
+'com.apple.inputmethod.Japanese' = 'ひらがな';
+'com.apple.inputmethod.Japanese.FullWidthRoman' = '全角英字';
+'com.apple.inputmethod.Japanese.HalfWidthKana' = '半角カタカナ';
+'com.apple.inputmethod.Japanese.Katakana' = 'カタカナ';
+'com.apple.inputmethod.Roman' = '英字';

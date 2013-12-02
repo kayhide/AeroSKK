@@ -16,8 +16,7 @@ class AppDelegate
 
   def buildServer
     @identifier = NSBundle.mainBundle.bundleIdentifier
-    @server = IMKServer.alloc.initWithName('AeroSKKConnection',
+    @server = IMKServer.alloc.initWithName(NSBundle.mainBundle.infoDictionary['InputMethodConnectionName'],
                                            bundleIdentifier: @identifier)
-
   end
 end

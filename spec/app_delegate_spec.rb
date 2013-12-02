@@ -29,9 +29,5 @@ describe "Application 'AeroSKK'" do
     it 'has bundle with indentifier of AeroSKK' do
       @server.bundle.should == NSBundle.mainBundle
     end
-
-    it 'has proper connection name' do
-      @server.bundle.infoDictionary['InputMethodConnectionName'].should == 'AeroSKKConnection'
-    end
   end
 end

@@ -6,8 +6,10 @@ begin
   require 'bundler'
   if ARGV.join(' ') =~ /spec/
     Bundler.require :default, :spec
+    RUBYMOTION_ENV = 'test'
   else
     Bundler.require
+    RUBYMOTION_ENV = 'development'
   end
 rescue LoadError
 end
@@ -23,7 +25,7 @@ Motion::Project::App.setup do |app|
   app.info_plist['CFBundleDevelopmentRegion'] = 'ja_JP'
   app.info_plist['NSHumanReadableCopyright'] = 'Copyright © 2013 Runnable Inc. All rights reserved.'
 
-  app.info_plist['InputMethodConnectionName'] = 'AeroSKKConnection'
+  app.info_plist['InputMethodConnectionName'] = "AeroSKKConnection_#{RUBYMOTION_ENV}"
   app.info_plist['InputMethodServerControllerClass'] = 'AeroSKKInputController'
   app.info_plist['LSBackgroundOnly'] = 1
   app.info_plist['ComponentInputModeDict'] = {

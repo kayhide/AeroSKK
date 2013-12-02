@@ -1,7 +1,7 @@
 class AppDelegate
   def applicationDidFinishLaunching(notification)
     buildMenu
-    buildWindow
+    # buildWindow
     buildServer
   end
 
@@ -14,11 +14,10 @@ class AppDelegate
     @mainWindow.orderFrontRegardless
   end
 
-
   def buildServer
-    @connection_name = NSBundle.mainBundle.infoDictionary['CFBundleName']
     @identifier = NSBundle.mainBundle.bundleIdentifier
-    @server = IMKServer.alloc.initWithName(@connection_name,
+    @server = IMKServer.alloc.initWithName('AeroSKKConnection',
                                            bundleIdentifier: @identifier)
+
   end
 end

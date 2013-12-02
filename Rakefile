@@ -15,24 +15,28 @@ end
 Motion::Project::App.setup do |app|
   app.name = 'AeroSKK'
   app.identifier = 'com.runnable-inc.inputmethod.AeroSKK'
+  app.icon = 'aero_skk.png'
   app.frameworks << 'InputMethodKit'
 
   app.redgreen_style = :full if app.respond_to?(:redgreen_style)
 
   app.info_plist['CFBundleDevelopmentRegion'] = 'ja_JP'
-  app.info_plist['CFBundleIconFile'] = ''
   app.info_plist['NSHumanReadableCopyright'] = 'Copyright © 2013 Runnable Inc. All rights reserved.'
+
+  app.info_plist['InputMethodConnectionName'] = 'AeroSKKConnection'
+  app.info_plist['InputMethodServerControllerClass'] = 'AeroSKKInputController'
+  app.info_plist['LSBackgroundOnly'] = 1
   app.info_plist['ComponentInputModeDict'] = {
     'tsInputModeListKey' => {
       'com.apple.inputmethod.Japanese' => {
-        'TISInputSourceID' => 'com.runnable-inc.inputmethod.AeroSKK',
+        'TISInputSourceID' => 'com.runnable-inc.inputmethod.AeroSKK.Japanese',
         'TISIntendedLanguage' => 'ja',
         'tsInputModeDefaultStateKey' => false,
         'tsInputModeIsVisibleKey' => true,
         'tsInputModeJISKeyboardShortcutKey' => 0,
-        'tsInputModeMenuIconFileKey' => 'Japanese.tif',
-        'tsInputModeAlternateMenuIconFileKey' => 'Japanese.tif',
-        'tsInputModePaletteIconFileKey' => 'Japanese.tif',
+        'tsInputModeMenuIconFileKey' => 'japanese.tiff',
+        'tsInputModeAlternateMenuIconFileKey' => 'japanese.tiff',
+        'tsInputModePaletteIconFileKey' => 'japanese.tiff',
         'tsInputModePrimaryInScriptKey' => true,
         'tsInputModeScriptKey' => 'smJapanese'
       },
@@ -42,34 +46,44 @@ Motion::Project::App.setup do |app|
         'tsInputModeDefaultStateKey' => true,
         'tsInputModeIsVisibleKey' => true,
         'tsInputModeJISKeyboardShortcutKey' => 1,
-        'tsInputModeMenuIconFileKey' => 'Roman.tiff',
-        'tsInputModeAlternateMenuIconFileKey' => 'Roman.tiff',
-        'tsInputModePaletteIconFileKey' => 'Roman.tiff',
+        'tsInputModeMenuIconFileKey' => 'roman.tiff',
+        'tsInputModeAlternateMenuIconFileKey' => 'roman.tiff',
+        'tsInputModePaletteIconFileKey' => 'roman.tiff',
         'tsInputModePrimaryInScriptKey' => true,
         'tsInputModeScriptKey' => 'smRoman',
       },
-      'com.apple.inputmethod.Japanese.FullWidthRoman' => {
-        'TISInputSourceID' => 'com.runnable-inc.inputmethod.AeroSKK.FullWidthRoman',
-        'TISIntendedLanguage' => 'ja',
-        'tsInputModeDefaultStateKey' => true,
-        'tsInputModeIsVisibleKey' => true,
-        'tsInputModeJISKeyboardShortcutKey' => 2,
-        'tsInputModeMenuIconFileKey' => 'FullWidthRoman.tiff',
-        'tsInputModeAlternateMenuIconFileKey' => 'FullWidthRoman.tiff',
-        'tsInputModePaletteIconFileKey' => 'FullWidthRoman.tiff',
-        'tsInputModePrimaryInScriptKey' => false,
-        'tsInputModeScriptKey' => 'smJapanese',
-      }
-    }
+    },
+    'tsVisibleInputModeOrderedArrayKey' =>
+    [
+     'com.apple.inputmethod.Japanese',
+     'com.apple.inputmethod.Roman'
+    ]
   }
-
+  app.info_plist['tsInputMethodCharacterRepertoireKey'] = %w(Hira Latn)
+  app.info_plist['tsInputMethodIconFileKey'] = 'aero_skk.png'
 end
 
-task :install do
-  app = Dir['./**/*.app'].first.gsub(/ /, '\\ ')
-  basename = File.basename(app)
-  dst = '~/Library/Input Methods/'.gsub(/ /, '\\ ')
-  puts "#{basename} => #{dst}"
-  `rm -rf #{dst}/#{basename}`
-  `cp -r #{app} #{dst}`
+$app = Dir['./**/AeroSKK.app'].first
+$app_basename = 'AeroSKK.app'
+$dst_dir = '~/Library/Input Methods/'
+$dst_app = "#{$dst_dir}#{$app_basename}"
+
+task :install => ['build:development', 'uninstall'] do
+  if $app && $dst_dir
+    puts "copy: #{$dst_app}"
+    `cp -r #{$app.gsub(/ /, '\\ ')} #{$dst_dir.gsub(/ /, '\\ ')}`
+  end
 end
+
+task :uninstall do
+  line = `ps x`.lines.grep(Regexp.new(Regexp.escape(File.expand_path($dst_app)))).first
+  if line
+    puts "kill: #{line}"
+    `kill #{line.split.first}`
+  end
+  if File.exist?(File.expand_path($dst_app))
+    puts "remove: #{$dst_app}"
+    `rm -rf #{$dst_app.gsub(/ /, '\\ ')}`
+  end
+end
+

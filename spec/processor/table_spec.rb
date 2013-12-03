@@ -1,6 +1,6 @@
-describe Processor do
+describe Processor::Table do
   before do
-    @processor = Processor.new
+    @processor = Processor::Table.new
   end
 
   describe '#to_s' do
@@ -25,6 +25,12 @@ describe Processor do
     it 'discards overridden char' do
       @processor.table['ro'] = 'RO'
       @processor << 'aerro'
+      @processor.to_s.should == 'aeRO'
+    end
+
+    it 'processes array' do
+      @processor.table['ro'] = 'RO'
+      @processor << ['aerro']
       @processor.to_s.should == 'aeRO'
     end
   end

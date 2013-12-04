@@ -27,11 +27,5 @@ describe Processor::Table do
       @processor << 'aerro'
       @processor.to_s.should == 'aeRO'
     end
-
-    it 'processes array' do
-      @processor.table['ro'] = 'RO'
-      @processor << ['aerro']
-      @processor.to_s.should == 'aeRO'
-    end
   end
 end

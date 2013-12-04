@@ -1,15 +1,18 @@
 module Processor
-  class Bottom < Base
-    def next
-      @next ||= []
-    end
-
+  class Bottom < Array
     def to_s
-      self.next.join
+      self.join
     end
 
     def to_a
-      self.next
+      self.inject [] do |ary, elm|
+        if (String === ary.last) && (String === elm)
+          ary.last << elm
+        else
+          ary << elm
+        end
+        ary
+      end
     end
   end
 end

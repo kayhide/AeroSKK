@@ -15,15 +15,24 @@ module Processor
     end
 
     def << elm
-      if Enumerable === elm
-        elm.inject(self, &:<<)
-      elsif elm
-        elm = self.process(elm) if self.processable?(elm)
-        if elm
+      if self.processable?(elm)
+        self.takeover self.process(elm)
+      else
+        self.takeover elm
+      end
+      self
+    end
+
+    def takeover elm
+      if elm
+        if Enumerable === elm
+          elm.each do |e|
+            self.takeover e
+          end
+        else
           self.next << elm
         end
       end
-      self
     end
 
     def processable? elm

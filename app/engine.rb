@@ -22,14 +22,6 @@ class Engine
   end
 
   def to_a
-    ary = @processors.first.to_a
-    ary.inject [] do |a, elm|
-      if (String === a.last) && (String === elm)
-        a.last << elm
-      else
-        a << elm
-      end
-      a
-    end
+    @processors.first.to_a
   end
 end

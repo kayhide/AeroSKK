@@ -14,6 +14,8 @@ begin
 rescue LoadError
 end
 
+require 'sugarcube-files'
+
 Motion::Project::App.setup do |app|
   app.name = 'AeroSKK'
   app.identifier = 'com.runnable-inc.inputmethod.AeroSKK'

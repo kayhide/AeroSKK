@@ -10,19 +10,11 @@ class AeroSKKInputController < IMKInputController
   def createEngine
     engine = Engine.new
     engine.register Processor::Table.new.tap{|p|
-      p.table['+'] = 'E'
-      p.table['j'] = 'a'
-      p.table['r'] = 'r'
-      p.table['k'] = 'o'
-    }
-    engine.register Processor::Table.new.tap{|p|
       p.table['E'] = ['_', 'e']
     }
-    engine.register Processor::Table.new.tap{|p|
-      p.table['e'] = 'E'
-      p.table['a'] = 'A'
-      p.table['ro'] = 'RO'
-    }
+    engine.register :cielo_roma
+    engine.register :roma_hiragana
+
     engine.register Processor::Delegator.new.tap{|p|
       p.delegate do |elm|
         @client.insertText(elm, replacementRange: [].nsrange)

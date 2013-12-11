@@ -6,6 +6,9 @@ class Engine
   end
 
   def register processor
+    if Symbol === processor
+      processor = Processor::Table.create(processor)
+    end
     if @processors.any?
       @processors.last.next = processor
     end

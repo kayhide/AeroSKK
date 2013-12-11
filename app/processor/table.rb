@@ -9,24 +9,18 @@ module Processor
     end
 
     def process elm
-      elm.each_char.map do |c|
-        self.process_char c
-      end
-    end
-
-    def process_char char
-      @cache << char
+      @cache << elm
       if full = @table[@cache]
         @cache = ''
         full
       else
         if @table.keys.each_with_object(@cache).none?(&:start_with?)
-          if @cache.length > char.length
+          if @cache.length > elm.length
             @cache = ''
-            self.process_char char
+            self.process elm
           else
             @cache = ''
-            char
+            elm
           end
         end
       end

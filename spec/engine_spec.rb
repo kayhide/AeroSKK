@@ -19,7 +19,7 @@ describe Engine do
     end
 
     it 'returns processed string' do
-      @engine << '+jrk'
+      @engine << '+' << 'j' << 'r' << 'k'
       @engine.to_a.should == [:wedge, 'EARO']
     end
   end

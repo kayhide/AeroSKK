@@ -5,26 +5,26 @@ describe Processor::Table do
 
   describe '#to_s' do
     it 'returns chars' do
-      @processor << 'aero'
+      @processor << 'a' << 'e' << 'r' << 'o'
       @processor.to_s.should == 'aero'
     end
 
     it 'converts single char' do
       @processor.table['a'] = 'A'
-      @processor << 'aero'
+      @processor << 'a' << 'e' << 'r' << 'o'
       @processor.to_s.should == 'Aero'
     end
 
     it 'converts many chars' do
       @processor.table['ro'] = 'RO'
       @processor.table['ra'] = 'RA'
-      @processor << 'aero'
+      @processor << 'a' << 'e' << 'r' << 'o'
       @processor.to_s.should == 'aeRO'
     end
 
     it 'discards overridden char' do
       @processor.table['ro'] = 'RO'
-      @processor << 'aerro'
+      @processor << 'a' << 'e' << 'r' << 'r' << 'o'
       @processor.to_s.should == 'aeRO'
     end
   end

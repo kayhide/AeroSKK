@@ -34,17 +34,21 @@ class AeroSKKInputController < IMKInputController
 
   def initWithServer server, delegate: delegate, client: client
     self.write_log 'initWithServer'
+    @ignoring_key_codes ||= [
+      102, # kVirtual_JISRomanModeKey
+      104, # kVirtual_JISKanaModeKey
+    ]
     @client = client
     @engine = self.createEngine
     super
   end
 
-  def handleEvent event, client: sender
-    characters = event.characters
-    keyCode = event.keyCode
-    modifierFlags = event.modifierFlags
-    self.write_log "#{characters}, #{keyCode}, #{modifierFlags}"
-    @client = sender
-    @engine << characters
+  def inputText string, key: keyCode, modifiers: flags, client: sender
+    self.write_log "#{string}, #{keyCode}, #{flags}"
+    unless @ignoring_key_codes.include? keyCode
+      @client = sender
+      @engine << string
+    end
+    true
   end
 end

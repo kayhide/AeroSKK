@@ -65,10 +65,9 @@ Motion::Project::App.setup do |app|
   app.info_plist['tsInputMethodIconFileKey'] = 'aero_skk.png'
 end
 
-$app = Dir['./**/AeroSKK.app'].first
-$app_basename = 'AeroSKK.app'
+$app = App.config.app_bundle_raw(App.config.local_platform)
 $dst_dir = '~/Library/Input Methods/'
-$dst_app = "#{$dst_dir}#{$app_basename}"
+$dst_app = File.join($dst_dir, File.basename($app))
 
 task :install => ['build:development', 'uninstall'] do
   if $app && $dst_dir
@@ -88,4 +87,3 @@ task :uninstall do
     `rm -rf #{$dst_app.gsub(/ /, '\\ ')}`
   end
 end
-

@@ -1,6 +1,6 @@
 describe "Application 'AeroSKK'" do
   before do
-    @app = NSApplication.sharedApplication
+    @app = NSApp
     @delegate = @app.delegate
   end
 

@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 class AeroSKKInputController < IMKInputController
-  def write_log string
-    @file ||= File.expand_path('~/aero_skk.log')
-    open(@file, 'a+') do |io|
-      io << "[#{Time.now}] #{string}\n"
-    end
-  end
-
   def createEngine
     engine = Engine.new
     engine.register Processor::Table.new.tap{|p|
@@ -17,6 +10,8 @@ class AeroSKKInputController < IMKInputController
 
     engine.register Processor::Delegator.new.tap{|p|
       p.delegate do |elm|
+        Logger.write "insertText #{elm}"
+
         @client.insertText(elm, replacementRange: [].nsrange)
         nil
       end
@@ -25,7 +20,7 @@ class AeroSKKInputController < IMKInputController
   end
 
   def initWithServer server, delegate: delegate, client: client
-    self.write_log 'initWithServer'
+    Logger.write 'initWithServer'
     @ignoring_key_codes ||= [
       102, # kVirtual_JISRomanModeKey
       104, # kVirtual_JISKanaModeKey
@@ -36,7 +31,7 @@ class AeroSKKInputController < IMKInputController
   end
 
   def inputText string, key: keyCode, modifiers: flags, client: sender
-    self.write_log "#{string}, #{keyCode}, #{flags}"
+    Logger.write "#{string}, #{keyCode}, #{flags}"
     unless @ignoring_key_codes.include? keyCode
       @client = sender
       @engine << string

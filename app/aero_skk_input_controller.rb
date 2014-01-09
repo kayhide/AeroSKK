@@ -32,7 +32,16 @@ class AeroSKKInputController < IMKInputController
     unless @ignoring_key_codes.include? keyCode
       @client = sender
       @engine << string
+      self.update_echo @engine.echo
     end
     true
+  end
+
+  def update_echo str
+    if str.present?
+      @client.setMarkedText(str.underline,
+        selectionRange: [str.length, 0].nsrange,
+        replacementRange: [].nsrange)
+    end
   end
 end

@@ -15,6 +15,7 @@ rescue LoadError
 end
 
 require 'sugarcube-files'
+require 'sugarcube-attributedstring'
 
 Motion::Project::App.setup do |app|
   app.name = 'AeroSKK'

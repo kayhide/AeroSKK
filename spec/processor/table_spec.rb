@@ -41,7 +41,7 @@ describe Processor::Table do
   context 'class' do
     describe '.create' do
       before do
-#        @processor = Processor::Table.create :roma_hiragana
+        # @processor = Processor::Table.create :roma_hiragana
         @processor = Processor::Table.create :cielo_roma
       end
 
@@ -49,7 +49,6 @@ describe Processor::Table do
         puts 'roman.txt'.resource
         @processor.table['a'].should != nil
       end
-      ##it
     end
   end
 end

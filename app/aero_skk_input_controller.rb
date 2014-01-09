@@ -1,10 +1,7 @@
-# -*- coding: utf-8 -*-
 class AeroSKKInputController < IMKInputController
   def createEngine
     engine = Engine.new
-    engine.register Processor::Table.new.tap{|p|
-      p.table['E'] = ['_', 'e']
-    }
+    engine.register :wedge_cielo
     engine.register :cielo_roma
     engine.register :roma_hiragana
 

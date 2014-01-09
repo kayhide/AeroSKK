@@ -13,27 +13,20 @@ module Processor
 
     def special_chars
       @special_chars ||= {
-        '<<Space>>' => ' ',
-        '<<Return>>' => "\n",
-        '<<Tab>>' => "\t",
+        '<<space>>' => ' ',
+        '<<return>>' => "\n",
+        '<<tab>>' => "\t",
+        '<<lt>>' => "<",
+        '<<gt>>' => ">",
         '<<wedge>>' => :wedge,
         '<<hammer>>' => :hammer,
       }
     end
 
-    def special_chars_pattern
-      @special_chars_pattern ||=
-        Regexp.new(
-        self.special_chars.keys.map do |k|
-          Regexp.escape k
-        end.join('|')
-        )
-    end
-
     def parse_line line
       key, value = line.split
       key = self.special_chars[key] || key
-      value = value.scan(/#{self.special_chars_pattern}|./).map do |v|
+      value = value.scan(/<<[^>]*>>|./).map do |v|
         self.special_chars[v] || v
       end
       value = value.first if value.one?

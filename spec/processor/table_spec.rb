@@ -35,4 +35,12 @@ describe Processor::Table do
       @processor.to_s.should == 'saxa'
     end
   end
+
+  describe '#echo' do
+    it 'returns cache string' do
+      @processor.table['ro'] = 'RO'
+      @processor << 'r'
+      @processor.echo.should == 'r'
+    end
+  end
 end

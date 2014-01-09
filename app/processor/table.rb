@@ -34,5 +34,9 @@ module Processor
         end
       end
     end
+
+    def echo
+      @cache
+    end
   end
 end

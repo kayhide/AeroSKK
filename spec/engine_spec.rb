@@ -23,4 +23,28 @@ describe Engine do
       @engine.to_a.should == [:wedge, 'EARO']
     end
   end
+
+  describe '#echo' do
+    it 'returns processor echo' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine << 'k'
+      @engine.echo.should == 'k'
+    end
+
+    it 'joins each processor echoes' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ta'] = 'TA'
+      }
+      @engine << 't' << 'k'
+      @engine.echo.should == 'tk'
+    end
+
+  end
 end

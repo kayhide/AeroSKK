@@ -42,5 +42,9 @@ module Processor
     def process elm
       elm
     end
+
+    def echo
+      ''
+    end
   end
 end

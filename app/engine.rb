@@ -27,4 +27,8 @@ class Engine
   def to_a
     @processors.first.to_a
   end
+
+  def echo
+    @processors.reverse.map(&:echo).join
+  end
 end

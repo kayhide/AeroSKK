@@ -7,6 +7,7 @@ module Processor
     end
 
     def process elm
+      Logger.write "status #{@status}"
       case @status
       when :opened
         self.push elm
@@ -36,6 +37,14 @@ module Processor
         @status = :hammered
       end
       nil
+    end
+
+    def pop
+      super.tap do
+        unless self.stacked?
+          @status = nil
+        end
+      end
     end
   end
 end

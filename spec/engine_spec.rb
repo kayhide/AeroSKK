@@ -45,6 +45,47 @@ describe Engine do
       @engine << 't' << 'k'
       @engine.echo.should == 'tk'
     end
+  end
 
+  describe '#pop' do
+    it 'returns nil when no stack existed' do
+      @engine = Engine.new
+      @engine.register Processor::Base.new
+      @engine.pop.should == nil
+    end
+
+    it 'returns nil when stacks are all empty' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ta'] = 'TA'
+      }
+      @engine.pop.should == nil
+    end
+
+    it 'pops last char from stack' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['abc'] = 'ABC'
+      }
+      @engine << 'a' << 'b'
+      @engine.pop
+      @engine.echo.should == 'a'
+    end
+
+    it 'pops last char on the stack of first processor' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ta'] = 'TA'
+      }
+      @engine << 't' << 'k'
+      @engine.pop
+      @engine.echo.should == 't'
+    end
   end
 end

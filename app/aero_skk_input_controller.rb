@@ -20,8 +20,8 @@ class AeroSKKInputController < IMKInputController
   def initWithServer server, delegate: delegate, client: client
     Logger.write 'initWithServer'
     @ignoring_key_codes ||= [
-      102, # kVirtual_JISRomanModeKey
-      104, # kVirtual_JISKanaModeKey
+      KeyCode::JISRomanModeKey,
+      KeyCode::JISKanaModeKey,
     ]
     @client = client
     @engine = self.createEngine
@@ -32,17 +32,20 @@ class AeroSKKInputController < IMKInputController
     Logger.write "#{string}, #{keyCode}, #{flags}"
     unless @ignoring_key_codes.include? keyCode
       @client = sender
-      @engine << string
+      unless string == "\b" && @engine.pop
+        @engine << string
+      end
       self.update_echo @engine.echo
     end
     true
   end
 
   def update_echo str
-    if str.present?
+    if str != @last_echo
       @client.setMarkedText(str.underline,
         selectionRange: [str.length, 0].nsrange,
         replacementRange: [].nsrange)
     end
+    @last_echo = str
   end
 end

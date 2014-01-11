@@ -34,6 +34,7 @@ module Processor
     end
 
     def echo
+      Logger.write "stack of #{self.class}: #{stack.inspect}"
       self.peek
     end
   end

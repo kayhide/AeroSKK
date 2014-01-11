@@ -31,4 +31,12 @@ class Engine
   def echo
     @processors.reverse.map(&:echo).join
   end
+
+  def pop
+    @processors.select do |p|
+      p.respond_to? :pop
+    end.find do |p|
+      p.pop
+    end
+  end
 end

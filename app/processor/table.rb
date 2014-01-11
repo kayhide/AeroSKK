@@ -1,41 +1,36 @@
 module Processor
   class Table < Base
     extend TableCreate
+    include Stackable
     attr_reader :table
 
     def initialize
       @table = {}
-      @cache = ''
     end
 
     def process elm
-      @cache << elm
+      self.push elm
       val = nil
       pairs = @table.select do |k, v|
-        val = v if k == @cache
-        k.start_with? @cache
+        val = v if k == self.peek
+        k.start_with? self.peek
       end
       if pairs.one? && val
-        @cache = ''
+        self.clear
         val
       elsif pairs.blank?
-        if @cache.length > elm.length
-          last_cache = @cache[0...-elm.length]
-          @cache = ''
+        if self.stack.length > elm.length
+          last_cache = self.fetch[0...-elm.length]
           if full = @table[last_cache]
             [full, self.process(elm)].flatten
           else
             self.process elm
           end
         else
-          @cache = ''
+          self.clear
           elm
         end
       end
-    end
-
-    def echo
-      @cache
     end
   end
 end

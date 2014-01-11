@@ -1,53 +1,41 @@
 module Processor
   class Anvil < Base
+    include Stackable
+
     def initialize
-      self.clear
+      @status = nil
     end
 
     def process elm
-      if @hammered
-        str = @cache
-        self.clear
-        str
-      elsif @wedge_closed
-        str = @cache + elm
-        self.clear
-        str
-      elsif @wedge_opened
-        @cache << elm
+      case @status
+      when :opened
+        self.push elm
         nil
+      when :closed
+        @status = nil
+        self.fetch + elm
+      when :hammered
+        @status = nil
+        self.fetch
       else
         elm
       end
     end
 
-    def echo
-      @cache
-    end
-
     def wedge
-      if @cache.present?
-        @wedge_opened = true
-        @wedge_closed = true
+      if self.stacked?
+        @status = :closed
       else
-        @wedge_opened = true
-        @wedge_closed = false
+        @status = :opened
       end
       nil
     end
 
     def hammer
-      if @cache.present?
-        @hammered = true
+      if self.stacked?
+        @status = :hammered
       end
       nil
-    end
-
-    def clear
-      @cache = ''
-      @wedge_opened = false
-      @wedge_closed = false
-      @hammered = false
     end
   end
 end

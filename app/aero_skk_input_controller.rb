@@ -5,6 +5,7 @@ class AeroSKKInputController < IMKInputController
     engine.register :cielo_roma
     engine.register :roma_hiragana
 
+    engine.register Processor::Anvil.new
     engine.register Processor::Delegator.new.tap{|p|
       p.delegate do |elm|
         Logger.write "insertText #{elm}"

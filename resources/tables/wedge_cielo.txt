@@ -26,3 +26,4 @@ C       <<wedge>>c
 X       <<wedge>>x
 B       <<wedge>>b
 Z       <<wedge>>z
+<<space>> <<hammer>><<space>>

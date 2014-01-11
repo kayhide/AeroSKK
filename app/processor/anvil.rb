@@ -4,29 +4,20 @@ module Processor
       self.clear
     end
 
-    def processable? elm
-      true
-    end
-
     def process elm
-      if Symbol === elm
-        self.send elm
+      if @hammered
+        str = @cache
+        self.clear
+        str
+      elsif @wedge_closed
+        str = @cache + elm
+        self.clear
+        str
+      elsif @wedge_opened
+        @cache << elm
         nil
       else
-        if @hammered
-          str = @cache
-          self.clear
-          str
-        elsif @wedge_closed
-          str = @cache + elm
-          self.clear
-          str
-        elsif @wedge_opened
-          @cache << elm
-          nil
-        else
-          elm
-        end
+        elm
       end
     end
 
@@ -42,12 +33,14 @@ module Processor
         @wedge_opened = true
         @wedge_closed = false
       end
+      nil
     end
 
     def hammer
       if @cache.present?
         @hammered = true
       end
+      nil
     end
 
     def clear

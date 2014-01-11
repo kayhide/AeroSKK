@@ -17,12 +17,10 @@ describe Processor::Base do
 
   describe 'next' do
     class Succ < Processor::Base
-      include Processor::StringProcessable
       def process elm; elm.succ; end
     end
 
     class Upcase < Processor::Base
-      include Processor::StringProcessable
       def process elm; elm.upcase; end
     end
 

@@ -16,7 +16,11 @@ module Processor
 
     def << elm
       if self.processable?(elm)
-        self.takeover self.process(elm)
+        if Symbol === elm
+          self.takeover self.send(elm)
+        else
+          self.takeover self.process(elm)
+        end
       else
         self.takeover elm
       end
@@ -36,7 +40,8 @@ module Processor
     end
 
     def processable? elm
-      false
+      (String === elm) ||
+      (Symbol === elm && self.respond_to?(elm))
     end
 
     def process elm

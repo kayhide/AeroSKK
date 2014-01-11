@@ -1,6 +1,5 @@
 module Processor
   class Table < Base
-    include StringProcessable
     extend TableCreate
     attr_reader :table
 

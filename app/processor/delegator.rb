@@ -4,10 +4,6 @@ module Processor
       @proc = proc
     end
 
-    def processable? elm
-      true
-    end
-
     def process elm
       @proc.call elm
     end

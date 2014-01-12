@@ -9,8 +9,8 @@ Mac で SKY配列 + SKK したい。
   http://openlab.ring.gr.jp/skk/index-j.html
 
 ## 環境 ##
-- OSX 10.8
-- RubyMotion 2.18
+- OSX 10.9
+- RubyMotion 2.19
 
 ## インストール ##
 `rake install`
@@ -25,3 +25,21 @@ AeroSKK のプロセスが存在する場合は、`kill` する。
 
 ## テスト ##
 `guard start`
+
+### 問題 ###
+たまにフリーズすることがある。
+どこかで nil 参照しているのが問題らしいが、原因はよく分からない。
+
+    2014-01-12 13:07:52.122 AeroSKK[66154:303] *nil description*
+
+こうなったら guard のプロセスを kill して、再開させる。
+プロセスIDは `AeroSKK[xxxxx:yyy]` の `xxxxx` の部分。
+
+    kill 66154
+    guard start
+
+## 参考 ##
+- **Gyaim**: MacRuby 製の IME。  
+  https://github.com/masui/Gyaim
+- **Input Method Kit**: 公式リファレンス  
+  https://developer.apple.com/library/mac/documentation/Cocoa/Reference/InputMethodKitFrameworkRef/_index.html

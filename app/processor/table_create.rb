@@ -30,8 +30,6 @@ module Processor
         self.special_chars[v] || v
       end
       value = value.first if value.one?
-      Logger.write line
-      Logger.write value
       [key, value]
     end
   end

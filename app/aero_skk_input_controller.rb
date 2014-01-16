@@ -5,12 +5,17 @@ class AeroSKKInputController < IMKInputController
     engine.register :cielo_roma
     engine.register :roma_hiragana
 
-    engine.register Processor::Anvil.new
+    engine.register Processor::Anvil.new.tap{|p|
+      p.convert do |base, tail|
+        @candidater.source = [base, tail]
+        @candidates.updateCandidates
+        @candidates.show(KIMKLocateCandidatesBelowHint)
+        nil
+      end
+    }
     engine.register Processor::Delegator.new.tap{|p|
       p.delegate do |elm|
-        Logger.write "insertText #{elm}"
-
-        @client.insertText(elm, replacementRange: [].nsrange)
+        self.insert elm
         nil
       end
     }
@@ -25,6 +30,11 @@ class AeroSKKInputController < IMKInputController
     ]
     @client = client
     @engine = self.createEngine
+    @candidates = IMKCandidates.alloc.initWithServer(
+      server,
+      panelType: KIMKSingleColumnScrollingCandidatePanel
+    )
+    @candidater = Candidater.new
     super
   end
 
@@ -35,17 +45,39 @@ class AeroSKKInputController < IMKInputController
       unless string == "\b" && @engine.pop
         @engine << string
       end
-      self.update_echo @engine.echo
+      self.update_echo
     end
     true
   end
 
-  def update_echo str
+  def insert str
+    Logger.write "insertText #{str.inspect}"
+    @client.insertText(str, replacementRange: [].nsrange)
+  end
+
+  def update_echo
+    str = @engine.echo.to_s.underline + @candidater.echo.to_s.bold
     if str != @last_echo
-      @client.setMarkedText(str.underline,
+      @client.setMarkedText(str,
         selectionRange: [str.length, 0].nsrange,
         replacementRange: [].nsrange)
     end
     @last_echo = str
+  end
+
+
+  def candidates sender
+    @candidater.candidates
+  end
+
+  def candidateSelectionChanged str
+    Logger.write "candidateSelectionChanged #{str}"
+    self.update_echo
+  end
+
+  def candidateSelected str
+    Logger.write "candidateSelected #{str}"
+    @candidater.take str
+    self.insert str
   end
 end

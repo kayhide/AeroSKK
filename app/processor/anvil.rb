@@ -2,8 +2,13 @@ module Processor
   class Anvil < Base
     include Stackable
 
+    def convert &proc
+      @proc = proc
+    end
+
     def initialize
       @status = nil
+      @proc = proc{|base, tail| "#{base}#{tail}" }
     end
 
     def process elm
@@ -14,10 +19,10 @@ module Processor
         nil
       when :closed
         @status = nil
-        self.fetch + elm
+        @proc.call [self.fetch, elm]
       when :hammered
         @status = nil
-        self.fetch
+        @proc.call [self.fetch, nil]
       else
         elm
       end

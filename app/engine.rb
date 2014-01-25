@@ -16,7 +16,14 @@ class Engine
   end
 
   def << elm
-    @processors.first << elm
+    case elm
+    when "\b"
+      unless self.pop
+        @processors.first << elm
+      end
+    else
+      @processors.first << elm
+    end
     self
   end
 

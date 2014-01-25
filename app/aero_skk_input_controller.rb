@@ -42,9 +42,7 @@ class AeroSKKInputController < IMKInputController
     Logger.write "#{string}, #{keyCode}, #{flags}"
     unless @ignoring_key_codes.include? keyCode
       @client = sender
-      unless string == "\b" && @engine.pop
-        @engine << string
-      end
+      @engine << string
       self.update_echo
     end
     true

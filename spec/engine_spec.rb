@@ -1,4 +1,28 @@
 describe Engine do
+  describe '#<<' do
+    before do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ta'] = 'TA'
+      }
+    end
+
+    describe 'pushing backspace' do
+      it 'passes when not stacked' do
+        @engine << "\b"
+        @engine.to_a.should == ["\b"]
+      end
+
+      it 'pops when stacked' do
+        @engine << 't' << 'k' << "\b"
+        @engine.echo.should == 't'
+      end
+    end
+  end
+
   describe '#to_s' do
     before do
       @engine = Engine.new

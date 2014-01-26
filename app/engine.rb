@@ -40,10 +40,14 @@ class Engine
   end
 
   def pop
-    @processors.select do |p|
-      p.respond_to? :pop
-    end.find do |p|
-      p.pop
+    @processors.find do |p|
+      p.respond_to?(:pop) && p.pop
+    end
+  end
+
+  def clear
+    @processors.each do |p|
+      p.respond_to?(:clear) && p.clear
     end
   end
 end

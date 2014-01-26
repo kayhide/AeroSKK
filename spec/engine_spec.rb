@@ -112,4 +112,29 @@ describe Engine do
       @engine.echo.should == 't'
     end
   end
+
+  describe '#clear' do
+    it 'clears stack' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['abc'] = 'ABC'
+      }
+      @engine << 'a' << 'b'
+      @engine.clear
+      @engine.echo.should == ''
+    end
+
+    it 'clears all stacks' do
+      @engine = Engine.new
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ka'] = 'KA'
+      }
+      @engine.register Processor::Table.new.tap{|p|
+        p.table['ta'] = 'TA'
+      }
+      @engine << 't' << 'k'
+      @engine.clear
+      @engine.echo.should == ''
+    end
+  end
 end

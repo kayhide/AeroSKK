@@ -36,4 +36,12 @@ describe Processor::Anvil do
       @processor.echo.should == ''
     end
   end
+
+  describe '#clear' do
+    it 'sets status nil' do
+      @processor << 'a' << :wedge << 'e' << 'r' << 'o'
+      @processor.clear
+      @processor.status.should == nil
+    end
+  end
 end

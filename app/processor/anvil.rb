@@ -1,6 +1,7 @@
 module Processor
   class Anvil < Base
     include Stackable
+    attr_reader :status
 
     def convert &proc
       @proc = proc
@@ -49,6 +50,12 @@ module Processor
         unless self.stacked?
           @status = nil
         end
+      end
+    end
+
+    def clear
+      super.tap do
+        @status = nil
       end
     end
   end

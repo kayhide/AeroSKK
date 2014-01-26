@@ -56,20 +56,43 @@ class AeroSKKInputController < IMKInputController
   end
 
   def inputText string, key: keyCode, modifiers: flags, client: sender
-    Logger.write "#{string}, #{keyCode}, #{flags}"
-    unless @ignoring_key_codes.include? keyCode
+    Logger.write "#{string}(#{string.inspect}), #{keyCode}, #{flags}"
+    if @candidates.isVisible
+      false
+    elsif @ignoring_key_codes.include?(keyCode)
+      true
+    else
       @client = sender
-      if @candidates.isVisible
-      else
-        if @candidate_string
+      if @candidate_string
+        if string =~ /[\a\e]/
+          string = nil
+        else
           self.insert @candidate_string
-          @candidate_string = nil
+          if string =~ /[\r\n\x03]/
+            string = nil
+          end
         end
-        @engine << string
+        @candidate_string = nil
       end
-      self.update_echo
+      if string == nil
+        self.update_echo
+        true
+      elsif self.acceptable? string
+        @engine << string
+        self.update_echo
+        true
+      else
+        Logger.write("passing #{string && string.inspect}")
+        @engine.clear
+        self.update_echo
+        false
+      end
     end
-    true
+  end
+
+  def acceptable? char
+    (char =~ /[[:ascii:]]/) &&
+      (char == "\b" || char =~ /[[:print:]]/)
   end
 
   def insert str

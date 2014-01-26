@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 $:.unshift("/Library/RubyMotion/lib")
 require 'motion/project/template/osx'
 
@@ -26,7 +25,7 @@ Motion::Project::App.setup do |app|
   app.redgreen_style = :full if app.respond_to?(:redgreen_style)
 
   app.info_plist['CFBundleDevelopmentRegion'] = 'ja_JP'
-  app.info_plist['NSHumanReadableCopyright'] = 'Copyright © 2013 Runnable Inc. All rights reserved.'
+  app.info_plist['NSHumanReadableCopyright'] = 'Copyright 2013 Runnable Inc. All rights reserved.'
 
   app.info_plist['InputMethodConnectionName'] = "AeroSKKConnection_#{RUBYMOTION_ENV}"
   app.info_plist['InputMethodServerControllerClass'] = 'AeroSKKInputController'

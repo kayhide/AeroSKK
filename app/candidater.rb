@@ -1,8 +1,16 @@
 class Candidater
   attr_accessor :source
+  attr_reader :dictionaries
+
+  def initialize
+    @dictionaries = []
+  end
 
   def candidates
-    [@source.join, @source.join + '1', @source.join + '2']
+    cands = @dictionaries.map do |dict|
+      dict.lookup(*@source)
+    end.inject(&:+)
+    [*cands.map(&:first), @source.join]
   end
 
   def echo

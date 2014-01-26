@@ -89,3 +89,20 @@ task :uninstall do
     `rm -rf #{$dst_app.gsub(/ /, '\\ ')}`
   end
 end
+
+
+$config_dir = File.expand_path('~/.aero_skk/')
+
+task :init_config => [File.join($config_dir, 'skk_servers')]
+
+file File.join($config_dir, 'skk_servers') => [$config_dir] do |t|
+  file = t.name
+  puts "create: #{file}"
+  open(file, 'w+') do |io|
+    io << <<EOS
+localhost 1178 euc-jp
+EOS
+  end
+end
+
+directory $config_dir

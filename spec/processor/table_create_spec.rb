@@ -1,6 +1,4 @@
 describe Processor::TableCreate do
-  extend Facon::SpecHelpers
-
   class TableMock
     extend Processor::TableCreate
     def table; @table ||= {}; end

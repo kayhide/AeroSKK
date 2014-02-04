@@ -1,4 +1,5 @@
 class Engine
+  attr_accessor :server
   attr_reader :processors
 
   def initialize

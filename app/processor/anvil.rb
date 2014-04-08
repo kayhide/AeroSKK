@@ -10,6 +10,7 @@ module Processor
     def initialize
       @status = nil
       @proc = proc{|base, tail| "#{base}#{tail}" }
+      self.load_hiragana_katakana
     end
 
     def process elm
@@ -45,6 +46,17 @@ module Processor
       nil
     end
 
+    def katakanize
+      @status = nil
+      if self.stacked?
+        self.fetch.each_char.map do |c|
+          @hiragana_katakana[c] || c
+        end
+      else
+        nil
+      end
+    end
+
     def pop
       super.tap do
         unless self.stacked?
@@ -57,6 +69,12 @@ module Processor
       super.tap do
         @status = nil
       end
+    end
+
+    def load_hiragana_katakana
+      file = Dir[File.join('tables', 'hiragana_katakana').resource + '.*'].first
+      text = open(file).read
+      @hiragana_katakana = Hash[text.each_line.map(&:chomp).map{|line| line.split.map(&:strip)}]
     end
   end
 end

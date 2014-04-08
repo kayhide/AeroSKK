@@ -35,5 +35,10 @@ describe Processor::TableCreate do
       key, value = TableMock.parse_line('a <<wedge>>x<<hammer>>')
       value.should == [:wedge, 'x', :hammer]
     end
+
+    it 'replaces katakanize' do
+      key, value = TableMock.parse_line('a x<<katakanize>>')
+      value.should == ['x', :katakanize]
+    end
   end
 end

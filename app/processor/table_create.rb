@@ -20,6 +20,7 @@ module Processor
         '<<gt>>' => ">",
         '<<wedge>>' => :wedge,
         '<<hammer>>' => :hammer,
+        '<<katakanize>>' => :katakanize,
       }
     end
 
